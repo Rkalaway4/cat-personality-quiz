@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Your Cat's Personality? | Friskies Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FFF8ED;
+    --cream-dark: #F5EBD6;
+    --red: #E63946;
+    --red-dark: #C1121F;
+    --ink: #1F1A17;
+    --ink-soft: #4A3F38;
+    --muted: #8A7E74;
+    --white: #FFFFFF;
+    --border: rgba(31, 26, 23, 0.12);
+    --shadow-sm: 0 2px 8px rgba(31, 26, 23, 0.06);
+    --shadow-md: 0 8px 24px rgba(31, 26, 23, 0.08);
+    --shadow-lg: 0 20px 48px rgba(31, 26, 23, 0.12);
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Decorative paw print background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(230, 57, 70, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(230, 57, 70, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== Header ===== */
+  .brand {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .brand-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    background: rgba(230, 57, 70, 0.08);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+
+  .brand h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .brand h1 em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .brand p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* ===== Start Screen ===== */
+  .start-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-illus {
+    font-family: 'Fraunces', serif;
+    font-size: 96px;
+    line-height: 1;
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+
+  .start-card h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .start-card p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 1.75rem;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .meta-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 18px 24px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(230, 57, 70, 0.25);
+  }
+
+  .btn-primary:hover {
+    background: var(--red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(230, 57, 70, 0.35);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  /* ===== Progress ===== */
+  .progress-wrap {
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--cream-dark);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red) 0%, #F4A261 100%);
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ===== Question Card ===== */
+  .q-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 2rem 1.75rem;
+    box-shadow: var(--shadow-md);
+    animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    display: inline-block;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  .q-text {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    margin-bottom: 1.75rem;
+    color: var(--ink);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    width: 100%;
+    text-align: left;
+    padding: 18px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--cream);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .option::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: white;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .option:hover {
+    background: white;
+    border-color: var(--red);
+    transform: translateX(4px);
+  }
+
+  .option:hover::before {
+    border-color: var(--red);
+    background: rgba(230, 57, 70, 0.1);
+  }
+
+  /* ===== Result Screen ===== */
+  .result {
+    animation: fadeUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-hero {
+    background: linear-gradient(135deg, var(--red) 0%, #F4A261 100%);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .result-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .result-emoji {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .result-name {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .result-desc {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.95;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ===== Food Section ===== */
+  .food-section {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem 1.75rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.5rem;
+  }
+
+  .food-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+
+  .food-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .food-subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .tiers {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .tier {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    border-left: 4px solid var(--border);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .tier:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tier-budget { border-left-color: #8FB88E; }
+  .tier-mid { border-left-color: #F4A261; }
+  .tier-premium { border-left-color: var(--red); }
+
+  .tier-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+
+  .tier-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .tier-budget .tier-label { color: #5A8759; }
+  .tier-mid .tier-label { color: #C97820; }
+  .tier-premium .tier-label { color: var(--red); }
+
+  .tier-price {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .tier-name {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  .tier-why {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* ===== Actions ===== */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    background: white;
+    color: var(--ink);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 480px) {
+    .wrap { padding: 1.25rem 1rem 2rem; }
+    .brand h1 { font-size: 32px; }
+    .brand p { font-size: 14px; }
+    .start-card, .q-card, .food-section { padding: 1.5rem 1.25rem; }
+    .start-illus { font-size: 72px; }
+    .start-card h2 { font-size: 22px; }
+    .q-text { font-size: 20px; }
+    .result-hero { padding: 2rem 1.25rem; }
+    .result-name { font-size: 28px; }
+    .result-emoji { font-size: 52px; }
+    .option { padding: 16px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <span class="brand-tag">Powered by Friskies</span>
+      <h1>What's your cat's <em>personality?</em></h1>
+      <p>Answer 9 questions and find the food that matches their vibe.</p>
+    </div>
+
+    <div id="app"></div>
+
+    <p class="footer-note">Not affiliated with Purina or Friskies. Personality results are for fun — always check with your vet about dietary needs.</p>
+  </div>
+
+<script>
+/* ============ QUIZ DATA ============ */
+const QUESTIONS = [
+  { q: "When a stranger comes to the door, your cat...",
+    options: [
+      { label: "Trots over to greet them", tags: ["social","bold"] },
+      { label: "Watches from a safe perch", tags: ["observant","cautious"] },
+      { label: "Vanishes under the bed instantly", tags: ["cautious","sensitive"] },
+      { label: "Couldn't care less, keeps napping", tags: ["chill","independent"] } ] },
+  { q: "How does your cat usually wake you up?",
+    options: [
+      { label: "Aggressive paw to the face", tags: ["bold","demanding"] },
+      { label: "Gentle meow from the doorway", tags: ["social","gentle"] },
+      { label: "Knocks something off a shelf", tags: ["playful","bold"] },
+      { label: "They don't — they sleep in too", tags: ["chill","independent"] } ] },
+  { q: "Pick your cat's favorite hangout spot.",
+    options: [
+      { label: "The highest point in the room", tags: ["observant","bold"] },
+      { label: "Right on your laptop", tags: ["social","demanding"] },
+      { label: "A weird cardboard box", tags: ["playful","independent"] },
+      { label: "A sunny, quiet windowsill", tags: ["chill","gentle"] } ] },
+  { q: "It's playtime. What's their move?",
+    options: [
+      { label: "Zooms around like a maniac", tags: ["playful","bold"] },
+      { label: "Stalks the toy like prey", tags: ["observant","playful"] },
+      { label: "Bats at it twice, then quits", tags: ["chill","independent"] },
+      { label: "Brings it to you to throw", tags: ["social","playful"] } ] },
+  { q: "How does your cat feel about being picked up?",
+    options: [
+      { label: "Melts into a puddle, loves it", tags: ["social","gentle"] },
+      { label: "Tolerates it for about 10 seconds", tags: ["chill","independent"] },
+      { label: "Squirms away immediately", tags: ["cautious","independent"] },
+      { label: "Hisses or bites — do not try", tags: ["sensitive","bold"] } ] },
+  { q: "New food in the bowl. Reaction?",
+    options: [
+      { label: "Inhales it in 30 seconds", tags: ["bold","demanding"] },
+      { label: "Sniffs cautiously, decides later", tags: ["observant","cautious"] },
+      { label: "Stares at you like you betrayed them", tags: ["sensitive","demanding"] },
+      { label: "Eats whatever, whenever", tags: ["chill","gentle"] } ] },
+  { q: "Your cat's body type and energy level?",
+    options: [
+      { label: "Lean and always in motion", tags: ["playful","bold"] },
+      { label: "Athletic, loves to climb and jump", tags: ["observant","playful"] },
+      { label: "Average — moderate energy", tags: ["chill","social"] },
+      { label: "Chonky, prefers the couch", tags: ["gentle","chill"] } ] },
+  { q: "How vocal is your cat?",
+    options: [
+      { label: "Never shuts up, full conversations", tags: ["social","demanding"] },
+      { label: "Meows when they want something", tags: ["demanding","bold"] },
+      { label: "Occasional chirp or trill", tags: ["gentle","observant"] },
+      { label: "Silent ninja, barely a peep", tags: ["cautious","independent"] } ] },
+  { q: "You've been gone all day. You walk in and...",
+    options: [
+      { label: "They sprint to the door, crying", tags: ["social","demanding"] },
+      { label: "They appear, rub your legs, then leave", tags: ["gentle","independent"] },
+      { label: "They give you a slow blink from afar", tags: ["chill","observant"] },
+      { label: "You don't see them for another hour", tags: ["independent","cautious"] } ] }
+];
+
+const ARCHETYPES = {
+  social: {
+    emoji: "♡",
+    name: "The Social Butterfly",
+    desc: "A people-magnet who thrives on attention and company. They'd rather supervise your day than nap alone.",
+    foods: {
+      budget:  { name: "Friskies Surfin' & Turfin' Favorites Dry Cat Food", price: "~$0.18/day", why: "Affordable everyday kibble you can leave out for grazing — perfect for a social cat who eats when you eat." },
+      mid:     { name: "Friskies Classic Paté Variety Pack (Wet)", price: "~$0.60/day", why: "Wet food mealtimes become a shared ritual. Paté texture is easy to eat and they'll come running when the can opens." },
+      premium: { name: "Friskies Lil' Soups Broth Toppers + Dry Kibble", price: "~$1.20/day", why: "Interactive lickable toppers turn mealtime into bonding time — a social cat's dream combo." }
+    }
+  },
+  bold: {
+    emoji: "★",
+    name: "The Fearless Explorer",
+    desc: "Confident, curious, fearless. Your cat charges into new situations like they own the place — because they do.",
+    foods: {
+      budget:  { name: "Friskies Seafood Sensations Dry Cat Food", price: "~$0.18/day", why: "Protein-forward crunchy kibble to fuel all that bravado and jumping off high places." },
+      mid:     { name: "Friskies Extra Gravy Chunky Variety Pack", price: "~$0.65/day", why: "Hearty chunks in rich gravy give bold eaters something to actually chew on." },
+      premium: { name: "Friskies Prime Filets in Gravy (Wet)", price: "~$0.95/day", why: "Real-looking filets satisfy a cat who thinks they're a lion. Texture matches the attitude." }
+    }
+  },
+  chill: {
+    emoji: "~",
+    name: "The Zen Master",
+    desc: "Unbothered, unhurried, impossible to rattle. Your cat has reached inner peace most humans can only dream of.",
+    foods: {
+      budget:  { name: "Friskies Indoor Delights Dry Cat Food", price: "~$0.18/day", why: "Formulated for lower-activity indoor cats — keeps the Zen Master from drifting into couch-potato territory." },
+      mid:     { name: "Friskies Classic Paté Turkey & Giblets", price: "~$0.55/day", why: "Smooth, predictable, reliable. A chill cat doesn't want surprises, and this delivers consistency." },
+      premium: { name: "Friskies Tasty Treasures with Cheese (Wet)", price: "~$0.80/day", why: "A small luxury for a cat who appreciates the finer things without making a fuss about it." }
+    }
+  },
+  playful: {
+    emoji: "※",
+    name: "The Mischief Maker",
+    desc: "Part acrobat, part comedian, part tiny tornado. Your cat treats life like an obstacle course and you're just living in it.",
+    foods: {
+      budget:  { name: "Friskies Party Mix Crunchy Treats", price: "~$0.15/day (as topper)", why: "Crunchy, playful treats perfect for training games and redirecting zoomies into something constructive." },
+      mid:     { name: "Friskies Shreds Variety Pack (Wet)", price: "~$0.60/day", why: "Shredded texture gives a playful cat something to work at — more engaging than smooth paté." },
+      premium: { name: "Friskies Cat Concoctions + Party Pack'd Combo", price: "~$1.10/day", why: "Rotating flavors and textures keep a curious, mischievous eater entertained at every meal." }
+    }
+  },
+  observant: {
+    emoji: "◉",
+    name: "The Strategist",
+    desc: "Quiet, watchful, always three steps ahead. Your cat studies the world before acting — and when they act, it's with precision.",
+    foods: {
+      budget:  { name: "Friskies Seafood Sensations Dry Cat Food", price: "~$0.18/day", why: "Steady, balanced nutrition for a thoughtful cat who watches before pouncing." },
+      mid:     { name: "Friskies Meaty Bits Variety Pack (Wet)", price: "~$0.60/day", why: "Chunky bits let a strategic eater take their time — no gulping, lots of deliberate chewing." },
+      premium: { name: "Friskies Prime Filets + Lil' Soups Topper", price: "~$1.15/day", why: "Layered textures reward a cat who observes their meal before diving in. Sophisticated for a sophisticated mind." }
+    }
+  },
+  gentle: {
+    emoji: "❀",
+    name: "The Gentle Soul",
+    desc: "Soft-spoken, sweet-natured, endlessly affectionate. Your cat is the emotional support animal you didn't know you needed.",
+    foods: {
+      budget:  { name: "Friskies Indoor Delights Dry Cat Food", price: "~$0.18/day", why: "Easy-to-eat kibble that's gentle on calmer appetites and predictable stomachs." },
+      mid:     { name: "Friskies Classic Paté Salmon Dinner", price: "~$0.55/day", why: "Smooth paté is the kindest texture for gentle eaters — no big chunks to wrestle with." },
+      premium: { name: "Friskies Lil' Soups Velvety Broth Toppers", price: "~$0.85/day", why: "Hydrating, easy-lickable broths that a gentle cat can savor slowly. Extra hydration never hurts." }
+    }
+  },
+  independent: {
+    emoji: "◈",
+    name: "The Lone Wolf",
+    desc: "Self-sufficient, low-maintenance. Your cat loves you — but on their schedule, and they're perfectly fine doing their own thing.",
+    foods: {
+      budget:  { name: "Friskies Surfin' & Turfin' Favorites Dry Cat Food", price: "~$0.18/day", why: "Fill the bowl, walk away. Stays fresh for free-feeding — exactly how a Lone Wolf prefers." },
+      mid:     { name: "Friskies Classic Paté (Single Cans, Mix Flavors)", price: "~$0.50/day", why: "Single-serve cans mean they eat on their own schedule — no waste, no hovering." },
+      premium: { name: "Friskies Dry Kibble + Lil' Soups Combo", price: "~$0.95/day", why: "Dry for self-serve grazing, plus a broth topper for the rare moment they deign to join you." }
+    }
+  },
+  cautious: {
+    emoji: "◎",
+    name: "The Careful Observer",
+    desc: "Thoughtful and a little shy. Your cat takes their time warming up — but once they trust you, it's for life.",
+    foods: {
+      budget:  { name: "Friskies Indoor Delights Dry Cat Food", price: "~$0.18/day", why: "Consistent, familiar formula for a cat who finds comfort in routine. No surprises." },
+      mid:     { name: "Friskies Classic Paté Chicken & Tuna Dinners", price: "~$0.55/day", why: "Mild, familiar flavors that won't startle a cautious palate. Introduce slowly." },
+      premium: { name: "Friskies Gravy Sensations Variety Pack", price: "~$0.80/day", why: "Gentle gravy texture is inviting without being overwhelming for a careful eater." }
+    }
+  },
+  sensitive: {
+    emoji: "♕",
+    name: "The Drama Royal",
+    desc: "Big feelings, strong opinions, zero tolerance for nonsense. Your cat knows exactly what they want and makes it known.",
+    foods: {
+      budget:  { name: "Friskies Party Mix Crunchy Treats", price: "~$0.15/day (as topper)", why: "Strong, irresistible flavors that can convince even the pickiest royal to eat." },
+      mid:     { name: "Friskies Tasty Treasures (Wet)", price: "~$0.60/day", why: "Bold flavors and extra gravy for a cat who demands presentation with their meal." },
+      premium: { name: "Friskies Prime Filets in Gravy + Lil' Soups", price: "~$1.25/day", why: "The royal treatment: real-looking filets plus a lickable topper course. Fit for a drama queen." }
+    }
+  },
+  demanding: {
+    emoji: "✦",
+    name: "The Boss",
+    desc: "Vocal, assertive, fully in charge of the household. You don't own this cat — this cat owns you, and you love it.",
+    foods: {
+      budget:  { name: "Friskies Seafood Sensations Dry Cat Food", price: "~$0.18/day", why: "Keeps the bowl stocked for a Boss who expects food to be ready on demand. 24/7 buffet." },
+      mid:     { name: "Friskies Extra Gravy Paté Variety Pack", price: "~$0.65/day", why: "Extra gravy means extra drama. A Boss wants every meal to feel like an event." },
+      premium: { name: "Friskies Prime Filets + Lil' Shakes Combo", price: "~$1.30/day", why: "Real filets plus a lickable shake — a full multi-course service. The Boss has spoken." }
+    }
+  }
+};
+
+/* ============ RENDER LOGIC ============ */
+const app = document.getElementById('app');
+let state = { screen: 'start', step: 0, tags: [] };
+
+function render() {
+  if (state.screen === 'start') renderStart();
+  else if (state.screen === 'quiz') renderQuestion();
+  else if (state.screen === 'result') renderResult();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderStart() {
+  app.innerHTML = `
+    <div class="start-card">
+      <div class="start-illus">🐾</div>
+      <h2>Ready to meet your cat's true self?</h2>
+      <p>A 2-minute personality test that pairs your cat with the Friskies food that fits them best.</p>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-dot"></span>9 questions</div>
+        <div class="meta-item"><span class="meta-dot"></span>10 archetypes</div>
+        <div class="meta-item"><span class="meta-dot"></span>3 food picks</div>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()">Start the quiz</button>
+    </div>
+  `;
+}
+
+function startQuiz() {
+  state = { screen: 'quiz', step: 0, tags: [] };
+  render();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.step];
+  const pct = Math.round((state.step / QUESTIONS.length) * 100);
+  app.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Question ${state.step + 1} of ${QUESTIONS.length}</span>
+        <span>${pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
+    </div>
+    <div class="q-card">
+      <div class="q-number">Q${state.step + 1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option" onclick="pickOption(${i})">${opt.label}</button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function pickOption(i) {
+  const q = QUESTIONS[state.step];
+  state.tags = state.tags.concat(q.options[i].tags);
+  state.step++;
+  if (state.step >= QUESTIONS.length) {
+    state.screen = 'result';
+  }
+  render();
+}
+
+function getResult() {
+  const counts = {};
+  state.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+  // Only count tags that are actually archetypes
+  const scored = Object.keys(ARCHETYPES).map(k => ({ k, n: counts[k] || 0 }));
+  scored.sort((a, b) => b.n - a.n);
+  return ARCHETYPES[scored[0].k];
+}
+
+function renderResult() {
+  const r = getResult();
+  app.innerHTML = `
+    <div class="result">
+      <div class="result-hero">
+        <div class="result-eyebrow">Your cat is...</div>
+        <div class="result-emoji">${r.emoji}</div>
+        <div class="result-name">${r.name}</div>
+        <div class="result-desc">${r.desc}</div>
+      </div>
+
+      <div class="food-section">
+        <div class="food-header">
+          <div class="food-title">Food picks for your cat</div>
+          <div class="food-subtitle">Three Friskies options at every budget</div>
+        </div>
+        <div class="tiers">
+          <div class="tier tier-budget">
+            <div class="tier-head">
+              <div class="tier-label">Budget</div>
+              <div class="tier-price">${r.foods.budget.price}</div>
+            </div>
+            <div class="tier-name">${r.foods.budget.name}</div>
+            <div class="tier-why">${r.foods.budget.why}</div>
+          </div>
+          <div class="tier tier-mid">
+            <div class="tier-head">
+              <div class="tier-label">Mid-tier</div>
+              <div class="tier-price">${r.foods.mid.price}</div>
+            </div>
+            <div class="tier-name">${r.foods.mid.name}</div>
+            <div class="tier-why">${r.foods.mid.why}</div>
+          </div>
+          <div class="tier tier-premium">
+            <div class="tier-head">
+              <div class="tier-label">Premium</div>
+              <div class="tier-price">${r.foods.premium.price}</div>
+            </div>
+            <div class="tier-name">${r.foods.premium.name}</div>
+            <div class="tier-why">${r.foods.premium.why}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-secondary" onclick="shareResult('${r.name.replace(/'/g, "\\'")}')">Share my result</button>
+        <button class="btn-primary" onclick="resetQuiz()">Take the quiz again</button>
+      </div>
+    </div>
+  `;
+}
+
+function resetQuiz() {
+  state = { screen: 'start', step: 0, tags: [] };
+  render();
+}
+
+function shareResult(name) {
+  const text = `My cat is "${name}" according to the Friskies Cat Personality Quiz! 🐾`;
+  if (navigator.share) {
+    navigator.share({ title: 'Cat Personality Quiz', text, url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text + ' ' + window.location.href).then(() => {
+      alert('Copied to clipboard!');
+    });
+  }
+}
+
+render();
+</script>
+</body>
+</html>
